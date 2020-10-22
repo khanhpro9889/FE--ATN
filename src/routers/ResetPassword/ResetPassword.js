@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+
 import { Parents, ResetPasswordWrap, Title, SubTitle, SendEmailButton } from './styles';
 import TextField from '@material-ui/core/TextField';
 import { useForm } from 'react-hook-form';
@@ -15,7 +15,6 @@ const ResetPassword = props => {
         handleSubmit,
         errors,
         setValue,
-        watch,
     } = useForm({
     mode: 'onBlur',
     nativeValidation: false
@@ -77,10 +76,6 @@ const ResetPassword = props => {
         </Parents>
         </>
     );
-};
-
-ResetPassword.propTypes = {
-    
 };
 
 export default ResetPassword;

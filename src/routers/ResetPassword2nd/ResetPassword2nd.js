@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
+
 import { Parents, ResetPasswordWrap, Title, SubTitle, SendEmailButton, StyledLink } from './styles';
 import TextField from '@material-ui/core/TextField';
 import { useForm } from 'react-hook-form';
@@ -8,7 +8,6 @@ import RegisterBanner from '../../assets/images/register-banner.jpg';
 import { useLocation } from 'react-router-dom';
 import SnackBar from '../../components/SnackBar';
 import { LOGIN_PATH } from '../../constants/Path';
-import { useHistory } from 'react-router-dom';
 import MiniLoadingSpinner from '../../components/MiniLoadingSpinner';
 
 const ResetPassword2nd = props => {
@@ -22,7 +21,6 @@ const ResetPassword2nd = props => {
     mode: 'onBlur',
     nativeValidation: false
     })
-    const history = useHistory();
     const [token, setToken] = useState(null);
     const [id, setId] = useState(null);
     const location = useLocation();
@@ -114,10 +112,6 @@ const ResetPassword2nd = props => {
         </Parents>
         </>
     );
-};
-
-ResetPassword2nd.propTypes = {
-    
 };
 
 export default ResetPassword2nd;

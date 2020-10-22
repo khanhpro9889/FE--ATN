@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { 
     Wrap, 
     WrapRight, 
@@ -10,23 +10,19 @@ import {
     Address
 } from './styles';
 
-const GymItem = props => {
+const GymItem = ({gym}) => {
     return (
         <Wrap>
             <WrapLeft>
-                <Thumnail src={'https://citigym.com.vn/storage/uploads/thumbnail-1-375x440.JPG'}></Thumnail>
+                <Thumnail src={gym.gallery[0].path}></Thumnail>
             </WrapLeft>
             <WrapRight>
-                <Name>Giti Gym Thành Thái</Name>
-                <Address><Icon icon={['fas', 'map-marker-alt']}></Icon>52 Thành Thái, Phường 12, Quận 10, Thành phố Hồ Chí Minh</Address>
+                <Name to={`/detail/${gym._id}`}>{gym.title}</Name>
+                <Address><Icon icon={['fas', 'map-marker-alt']}></Icon>{gym.address}, {gym.district.path_with_type}</Address>
                 <Icon icon={['fas', 'star']}/>8.5
             </WrapRight>
         </Wrap>
     );
-};
-
-GymItem.propTypes = {
-    
 };
 
 export default GymItem;

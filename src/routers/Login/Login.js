@@ -1,6 +1,4 @@
-import React, {useState, useEffect}from 'react';
-import PropTypes from 'prop-types';
-import Boxed from '../../components/Boxed';
+import React, {useState}from 'react';
 import LoginBanner from '../../assets/images/login-banner.jpg';
 import Divider from '@material-ui/core/Divider';
 import {
@@ -20,10 +18,14 @@ import GoogleLogin from 'react-google-login';
 import { loginSocial, login } from '../../api/authApi';
 import SnackBar from '../../components/SnackBar';
 import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getUserProfile } from '../../store/Profile/ProfileAction';
+import { HOME_PATH } from '../../constants/Path';
 
-const Login = props => {
+const Login = ({getUserProfile, loadingProfile}) => {
     const history = useHistory();
     const [openSnackBarLoginFail, setOpenSnackBarLoginFail] = useState(false);
+    const [openSnackBarLoginFailOther, setOpenSnackBarLoginFailOther] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleLoginGoogle = async (response) => {
@@ -35,6 +37,8 @@ const Login = props => {
             socialType: 'google'
         })
         localStorage.setItem('token', res.token);
+        getUserProfile();
+        history.push(HOME_PATH);
     }
 
     const handleLoginFacebook = async (response) => {
@@ -46,6 +50,8 @@ const Login = props => {
             socialType: 'facebook'
         })
         localStorage.setItem('token', res.token);
+        getUserProfile();
+        history.push(HOME_PATH);
     }
 
     const handleLogin = async (value) => {
@@ -57,6 +63,14 @@ const Login = props => {
         } else {
             if(res.message === 'Tài khoản chưa được xác nhận') {
                 history.push(`/confirm?id=${res.uid}&type=reconfirm`);
+            } else {
+                if (res.message === 'Auth successful') {
+                    localStorage.setItem('token', res.token);
+                    getUserProfile();
+                    history.push(HOME_PATH);
+                } else {
+                    setOpenSnackBarLoginFailOther(true);
+                }
             }
         }
     }
@@ -66,10 +80,12 @@ const Login = props => {
             return;
         }
         setOpenSnackBarLoginFail(false);
+        setOpenSnackBarLoginFailOther(false);
     }
 
     return (
         <>
+        <SnackBar open={openSnackBarLoginFailOther} message="Có lỗi xảy ra" handleClose={handleCloseSnackBar} type="error"/>
         <SnackBar open={openSnackBarLoginFail} message="Sai tên đăng nhập hoặc mật khẩu" handleClose={handleCloseSnackBar} type="error"/>
         <Parents src={LoginBanner}>
             <LoginWrap>
@@ -113,8 +129,19 @@ const Login = props => {
     );
 };
 
-Login.propTypes = {
-    
-};
+const mapStateToProps = (state) => {
+    return {
+        userProfile: state.ProfileReducer.userProfile,
+        loadingProfile: state.ProfileReducer.loading
+    }
+}
 
-export default Login;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getUserProfile: () => {
+            dispatch(getUserProfile());
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,40 +1,33 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { 
     AccountMenuWrapper, 
     ImgProfileNav, 
-    Name, 
     SubMenu, 
     SubmenuItemWrapper,
-    SubmenuItem
+    SubmenuItem,
+    SignOutButton
  } from './styles';
 import Avatar from '../assets/images/avatar.jpg';
 
-const AccountMenu = props => {
+const AccountMenu = ({userProfile, signOut}) => {
     return (
         <AccountMenuWrapper>
-            <ImgProfileNav src={Avatar}></ImgProfileNav>
-            <Name>Hồ Gia Khánh</Name>
+            <ImgProfileNav src={userProfile.profileImg || Avatar}></ImgProfileNav>
             <SubMenu>
                 <SubmenuItemWrapper>
-                    <SubmenuItem>My profile</SubmenuItem>
+                    <SubmenuItem to={`/profile/${userProfile._id}`}>My profile</SubmenuItem>
                 </SubmenuItemWrapper>
                 <SubmenuItemWrapper>
-                    <SubmenuItem>Thêm phòng gym</SubmenuItem>
-                </SubmenuItemWrapper>
-                <SubmenuItemWrapper>
-                    <SubmenuItem>Phòng gym của bạn</SubmenuItem>
-                </SubmenuItemWrapper>
-                <SubmenuItemWrapper>
-                    <SubmenuItem>Đăng xuất</SubmenuItem>
+                    <SignOutButton onClick={() => {
+                        signOut();
+                    }}>
+                        Đăng xuất
+                    </SignOutButton>
                 </SubmenuItemWrapper>
             </SubMenu>
         </AccountMenuWrapper>
     );
 };
 
-AccountMenu.propTypes = {
-    
-};
-
-export default AccountMenu;
+export default React.memo(AccountMenu);

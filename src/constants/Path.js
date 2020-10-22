@@ -8,3 +8,7 @@ export const RANKING_PATH = '/ranking'
 export const CONFIRM_PATH = '/confirm'
 export const RESET_PASSWORD_PATH = '/reset'
 export const RESET_PASSWORD_2ND_PATH = '/reset-2nd'
+export const ADD_PATH = '/add/:id';
+export const PROFILE_PATH = '/profile/:id';
+export const ADD_PT_PATH = '/add-pt';
+export const DETAIL_PATH = '/detail/:id';

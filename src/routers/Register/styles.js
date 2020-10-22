@@ -25,7 +25,7 @@ export const RegisterWrap = Styled.div`
     z-index: 290;
     margin: 0 auto;
     max-width: 700px;
-    border-radius: 20px;
+    border-radius: 5px;
     padding: 20px 30px;
     opacity: 0.9;
     form {
@@ -47,12 +47,12 @@ export const RegisterWrap = Styled.div`
         }
         input {
             border: 2px solid #1e3c72;
-            border-radius: 20px;
+            border-radius: 5px;
             padding: 10px 20px;
         }
         label {
            top: -5px;
-           font-family: 'montserrat', sans-serif;
+           font-family: 'calibri', sans-serif;
            color: #1e3c72;
         }
     }
@@ -63,16 +63,14 @@ export const RegisterWrap = Styled.div`
 `
 
 export const RegisterButton = Styled(MyButton)`
-    border-radius: 20px;
+    border-radius: 5px;
     font-weight: 500;
     background: #1e3c72;
     color: #fff;
     transition: 0.4s;
-    border: 1px solid #1e3c72;
     &:hover {
         background: none;
         color: #1e3c72;
-        border: 1px solid #1e3c72;
     }
 `
 

@@ -4,12 +4,40 @@
   box-sizing: border-box;
 }
 body {
-  font-family: 'Montserrat', sans-serif ;
+  font-family: 'calibri', sans-serif ;
 }
 
 .MuiDrawer-paper {
   width: 280px !important;
 }
 input {
-  font-family: 'Montserrat', sans-serif ;
+  font-family: 'calibri', sans-serif !important;
+}
+#menu-province li{
+  font-family: 'calibri', sans-serif ;
+}
+#menu-district li {
+  font-family: 'calibri', sans-serif ;
+}
+.MuiPaper-root .MuiTypography-root{
+  font-family: 'calibri', sans-serif ;
+}
+.MuiPaper-root .MuiButtonBase-root {
+  font-family: 'calibri', sans-serif ;
+}
+.MuiPaper-root .MuiIconButton-colorPrimary:hover {
+  background: #1e3c72;
+}
+.MuiPaper-root {
+  scrollbar-width: thin;
+  scrollbar-color: #1e3c7282 #eee;
+}
+.MuiList-root .Mui-selected {
+  color: #fff;
+  background-color: #1e3c72;
+}
+.MuiList-root .MuiListItem-button:hover {
+  text-decoration: none;
+  color: #fff;
+  background-color: #1e3c72;
 }

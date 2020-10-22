@@ -6,6 +6,11 @@ import Register from './Register';
 import Confirm from './Confirm';
 import ResetPassword from './ResetPassword';
 import ResetPassword2nd from './ResetPassword2nd';
+import WithLogin from '../utils/router/withLogin';
+import WithNoLogin from '../utils/router/withNoLogin';
+import AddGym from './AddGym';
+import ProfilePage from './ProfilePage';
+import Detail from './Detail';
 
 const Routes = (props) => {
     return (
@@ -14,12 +19,23 @@ const Routes = (props) => {
                 {
                     [
                         Home,
+                        Detail,
+                        ProfilePage
+                    ].map((item) => (<Route key={item.path} exact path={item.path} component={item.component} />))
+                }
+                {
+                    [
                         Login,
                         Register,
                         Confirm,
                         ResetPassword,
-                        ResetPassword2nd
-                    ].map((item) => (<Route key={item.path} exact path={item.path} {...item} />))
+                        ResetPassword2nd,
+                    ].map((item) => (<WithLogin key={item.path} exact path={item.path} component={item.component} />))
+                }
+                {
+                    [
+                        AddGym,
+                    ].map((item) => (<WithNoLogin key={item.path} exact path={item.path} component={item.component} />))
                 }
             </Switch>
         </>
