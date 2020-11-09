@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { Spinner, Wrap } from './styles';
 
 const MiniLoadingSpinner = props => {
@@ -14,10 +14,6 @@ const MiniLoadingSpinner = props => {
             />
         </Wrap>
     );
-};
-
-MiniLoadingSpinner.propTypes = {
-    
 };
 
 export default MiniLoadingSpinner;

@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -15,10 +15,6 @@ const SnackBar = ({message, open, type, handleClose}) => {
             </Alert>
         </Snackbar>
     );
-};
-
-SnackBar.propTypes = {
-    
 };
 
 export default SnackBar;

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+
 import { RegisterWrap, Parents, Title } from './styles';
 import RegisterForm from './RegisterForm';
 import RegisterBanner from '../../assets/images/register-banner.jpg';
@@ -48,10 +48,6 @@ const Register = props => {
         </Parents>
         </>
     );
-};
-
-Register.propTypes = {
-    
 };
 
 export default Register;

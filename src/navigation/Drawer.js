@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { 
     Wrapper,
     WrapItemDrawer, 
@@ -11,7 +11,8 @@ import {
     LeftLogin,
     RightLogin,
     ImgProfile,
-    IconBtn
+    IconBtn,
+    SignOutButton
 } from './styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,7 +22,7 @@ import { HOME_PATH, RANKING_PATH, LOGIN_PATH } from '../constants/Path';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '../assets/images/avatar.jpg';
 
-const Drawer = ({isOpen, setIsOpen}) => {
+const Drawer = ({isOpen, setIsOpen, signOut, userProfile}) => {
     return (
         <Wrapper>
             <SwipeableDrawer
@@ -33,11 +34,11 @@ const Drawer = ({isOpen, setIsOpen}) => {
                 <WrapperMenu> 
                     <LoginDrawer>
                         <LeftLogin>
-                            <ImgProfile src={Avatar}/>
+                            <ImgProfile src={userProfile ? userProfile.profileImg : Avatar}/>
                         </LeftLogin>
                         <RightLogin>
                             <NavItemDrawer to={LOGIN_PATH}><IconBtn icon={['fas', 'sign-in-alt']}></IconBtn>Login/Signup</NavItemDrawer>
-                            <NavItemDrawer><IconBtn icon={['fas', 'sign-out-alt']}></IconBtn>Đăng xuất</NavItemDrawer>
+                            <SignOutButton onClick={() => signOut()}><IconBtn icon={['fas', 'sign-out-alt']}></IconBtn>Đăng xuất</SignOutButton>
                         </RightLogin>
                     </LoginDrawer>
                     <Divider />
@@ -81,10 +82,6 @@ const Drawer = ({isOpen, setIsOpen}) => {
           </SwipeableDrawer>
         </Wrapper>
     );
-};
-
-Drawer.propTypes = {
-    
 };
 
 export default Drawer;

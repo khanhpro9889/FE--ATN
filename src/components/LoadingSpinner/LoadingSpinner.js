@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { Spinner, Wrap } from './styles';
 
 const LoadingSpinner = props => {
@@ -14,10 +14,6 @@ const LoadingSpinner = props => {
             />
         </Wrap>
     );
-};
-
-LoadingSpinner.propTypes = {
-    
 };
 
 export default LoadingSpinner;

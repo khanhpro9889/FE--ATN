@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import TextField from '@material-ui/core/TextField';
 import { LoginButton, StyledLink, ResetLink } from './styles';
 import { REGISTER_PATH, RESET_PASSWORD_PATH } from '../../constants/Path';
@@ -12,8 +12,6 @@ const LoginForm = ({onSubmit, loading}) => {
         register,
         handleSubmit,
         errors,
-        setValue,
-        watch,
     } = useForm({
     mode: 'onBlur',
     nativeValidation: false
@@ -60,10 +58,6 @@ const LoginForm = ({onSubmit, loading}) => {
             {loading ? <MiniLoadingSpinner /> : <LoginButton onClick={handleSubmit(onSubmit)} text="Đăng nhập" />} hoặc <StyledLink to={REGISTER_PATH}>Đăng ký</StyledLink>
         </form>
     );
-};
-
-LoginForm.propTypes = {
-    
 };
 
 export default LoginForm;

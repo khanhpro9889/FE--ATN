@@ -8,14 +8,22 @@ export const SearchIcon = Styled(FontAwesomeIcon)`
 
 export const Nav = Styled.nav`
     padding: 20px 0px;
-    background: #1e3c72;
+    background: #fff;
+    z-index: 1000;
+    box-shadow: 0 4px 4px 0px #eee;
     @media only screen and (max-width: 768px) {
         padding-left: 20px;
         padding-right: 20px;
     }
+    button {
+        display: none;
+        @media only screen and (max-width: 768px) {
+            display: inline-block;
+        }
+    }
     .MuiInputBase-root {
         background: #fff;
-        border-radius: 20px;
+        border-radius: 5px;
         padding: 5px 10px;
         width: 200px;
     }
@@ -35,10 +43,10 @@ export const Nav = Styled.nav`
     }
     input {
         color: #1e3c72;
-        font-family: 'montserrat', sans-serif;
+        font-family: 'calibri', sans-serif;
     }
     input::-moz-placeholder {
-        font-family: 'montserrat', Arial, Helvetica, sans-serif;  
+        font-family: 'calibri', Arial, Helvetica, sans-serif;  
     }
     button svg {
         margin: 0px;
@@ -47,6 +55,7 @@ export const Nav = Styled.nav`
 export const NavItem = Styled(Link)`
     text-decoration: none;
     margin: 10px 0px;
+    color: #1e3c72;
 `
 
 export const InnerNav = Styled.div`
@@ -72,6 +81,10 @@ export const Menu = Styled.div`
     >div:nth-child(1), >div:nth-child(2){
         margin-top: 10px;
     }
+    @media only screen and (max-width: 768px) {
+        display: none;
+    }
+    
 `
 
 export const WrapItem = Styled.div`
@@ -82,7 +95,7 @@ export const WrapItem = Styled.div`
         color: #1e3c72;
     }
     a {
-        color: #fff;
+        color: #1e3c72 !important;
     }
 `
 
@@ -93,7 +106,7 @@ export const Brand = Styled.div`
     padding-top: 5px;
     font-weight: 600;
     a {
-        color: #fff;
+        color: #1e3c72 !important;
     }
 `
 
@@ -125,22 +138,22 @@ export const NavItemDrawer = Styled(Link)`
 export const WrapperMenu = Styled.div`
     .MuiInputBase-root {
         background: #fff;
-        border-radius: 20px;
+        border-radius: 5px;
         border: 1px solid #1e3c72;
         padding: 5px 10px;
         margin: 20px 0px;
         width: 100%;
     }
     input::-moz-placeholder {
-        font-family: 'montserrat', Arial, Helvetica, sans-serif;  
+        font-family: 'calibri', Arial, Helvetica, sans-serif;  
     }
     input {
         color: #1e3c72;
-        font-family: 'montserrat', sans-serif;
+        font-family: 'calibri', sans-serif;
     }
     .MuiInputBase-root {
         background: #fff;
-        border-radius: 20px;
+        border-radius: 5px;
         padding: 5px 10px;
     }
     .MuiInputBase-root::before {
@@ -211,11 +224,14 @@ export const LoginSection = Styled.div`
 export const SubMenu = Styled.div`
     position: absolute;
     background: #fff;
-    bottom: -195px;
+    bottom: -78px;
+    right: 0px;
+    width: 150px;
     z-index: 300;
     box-shadow: 0px 0px 10px gray;
     opacity: 0;
     visibility: hidden;
+    text-align: left;
 `
 
 export const AccountMenuWrapper = Styled.div`
@@ -230,9 +246,10 @@ export const AccountMenuWrapper = Styled.div`
 `
 
 export const ImgProfileNav = Styled.img`
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
 `
 
 export const Name = Styled.div`
@@ -259,10 +276,18 @@ export const SubmenuItem = Styled(Link)`
     text-decoration: none;
 `
 
+export const SignOutButton = Styled.div`
+    font-weight: 600;
+    color: #1e3c72 !important;
+    cursor: pointer;
+`
+
 export const WrapItemLogin = Styled.div`
-    position: relative;
-    width: 150px;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 0px;
     a {
+        display: block;
         font-weight: 600;
         color: #1e3c72;
     }
@@ -275,7 +300,6 @@ export const LoginButton = Styled(Link)`
     text-decoration: none;
     background: #96deda;
     padding: 10px 20px;
-    position: absolute;
     top: 0px;
     right: 0px; 
 `

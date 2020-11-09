@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import TextField from '@material-ui/core/TextField';
 import { RegisterButton, StyledLink } from './styles';
 import { LOGIN_PATH } from '../../constants/Path';
@@ -12,7 +12,6 @@ const RegisterForm = ({onSubmit, loading}) => {
         register,
         handleSubmit,
         errors,
-        setValue,
         watch,
     } = useForm({
     mode: 'onBlur',
@@ -96,10 +95,6 @@ const RegisterForm = ({onSubmit, loading}) => {
         </form>
         </>
     );
-};
-
-RegisterForm.propTypes = {
-    
 };
 
 export default RegisterForm;
