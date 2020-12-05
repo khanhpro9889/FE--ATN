@@ -170,7 +170,8 @@ export const Info = Styled.div`
 `
 
 export const ImgImageView = Styled.img`
-    width: 100%;
+    max-width: 100%;
+    height: 500px;
     position: relative;
     z-index: 31;
 `

@@ -1,6 +1,4 @@
 import React, {useState, useEffect}from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Wrapper, 
@@ -19,7 +17,6 @@ import { validatePhone } from '../../utils/form';
 const EditProfile = ({profile, setEditProfile, updateProfile, provinces}) => {
     const [selectedFile, setSelectedFile] = useState()
     const [imageSrc, setImageSrc] = useState(null);
-    const [checked, setChecked] = useState(false);
     const [selectedProvince, setSelectedProvince] = useState('-1');
 
     const {
@@ -38,11 +35,10 @@ const EditProfile = ({profile, setEditProfile, updateProfile, provinces}) => {
         setValue('phone', profile.phone, {shouldValidate: false});
         setValue('about', profile.about, {shouldValidate: false});
         setValue('work', profile.work, {shouldValidate: false})
-        setChecked(profile.isHidden);
         if (profile.city) {
             setSelectedProvince(profile.city._id);
         }   
-    }, [])
+    }, [profile, setValue])
 
     const onSelectFile = (e) => {
         if (!e.target.files || e.target.files.length === 0) {
@@ -62,7 +58,10 @@ const EditProfile = ({profile, setEditProfile, updateProfile, provinces}) => {
     }
 
     const onSubmit = (value) => {
-        updateProfile({...value, isHidden: checked, city: selectedProvince}, selectedFile);
+        if (selectedProvince !== -1) {
+            return updateProfile({...value, city: selectedProvince}, selectedFile);
+        }
+        updateProfile({...value, city: null}, selectedFile);
     }
 
     return (
@@ -149,7 +148,7 @@ const EditProfile = ({profile, setEditProfile, updateProfile, provinces}) => {
                     //     errors.phone.type === 'validate' &&
                     //     'Số điện thoại không hợp lệ')}
                 />
-                <label>Địa chỉ</label>
+                <label>Sinh sống tại</label>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -170,19 +169,6 @@ const EditProfile = ({profile, setEditProfile, updateProfile, provinces}) => {
                     // defaultValue={profile.content || null}
                     name="about"
                     ref={register}
-                />
-                <FormControlLabel
-                    control={
-                    <Checkbox
-                        checked={checked}
-                        onChange={(event) => {
-                            setChecked(event.target.checked)
-                        }}
-                        name="isHidden"
-                        color="primary"
-                    />
-                    }
-                    label="Ẩn khi đánh giá"
                 />
                 <ButtonPlace>
                     <ButtonEdit onClick={handleSubmit(onSubmit)} text="Cập nhật"/>

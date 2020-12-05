@@ -1,15 +1,16 @@
 import React, {useState, useEffect} from 'react';
-
 import { ConfirmWrap, Parents, Title, StyledLink, SubTitle, ResendButton } from './styles';
 import RegisterBanner from '../../assets/images/register-banner.jpg';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { resendEmail } from '../../api/authApi';
 import SnackBar from '../../components/SnackBar';
 import MiniLoadingSpinner from '../../components/MiniLoadingSpinner';
 import { LOGIN_PATH } from '../../constants/Path';
+import { getUserProfileApi } from '../../api/userApi';
 
 const Confirm = props => {
     const location = useLocation();
+    const history = useHistory();
     const [id, setId] = useState('');
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [openSnackBarErr, setOpenSnackBarErr] = useState(false);
@@ -55,10 +56,18 @@ const Confirm = props => {
     useEffect(() => {
         const query = new URLSearchParams(location.search); 
         setId(query.get('id'));
+        const getUserProfile = async () => {
+            const res = await getUserProfileApi(query.get('id'));
+            if (res.isVerified) {
+                history.push(LOGIN_PATH);
+            }
+        }
+        getUserProfile();
         if(query.get('type') === 'reconfirm') {
             setReconfirm(true);
         }
-    }, [])
+        // eslint-disable-next-line
+    }, [location.search])
 
     return (
         <>

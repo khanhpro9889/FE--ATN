@@ -1,4 +1,5 @@
 import Styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Wrapper = Styled.div`
     display: flex;
@@ -17,8 +18,6 @@ export const Left = Styled.div`
     padding: 15px;
     box-shadow: 0px 0px 5px silver;
     height: min-content;
-    position: sticky;
-    top: 10px;
     border-radius: 8px;
     @media only screen and (max-width: 768px) {
         width: 100%;
@@ -59,11 +58,58 @@ export const Avatar = Styled.img`
     position: absolute;
     bottom: -20px;
     border: 5px solid #fff;
+    @media only screen and (max-width: 480px) {
+        width: 150px;
+        height: 150px;
+    }
 `
 
 export const Name = Styled.div`
     font-size: 48px;
     bottom: -90px;
     position: absolute;
+    @media only screen and (max-width: 480px) {
+        font-size: 30px;
+        bottom: -55px;
+    }
+`
+
+export const Children = Styled.div`
+    padding: 15px;
+`
+
+export const MenuLink = Styled(Link)`
+    text-decoration: none;
+    font-size: 20px;
+    width: 100%;
+    width: 100%;
+    display: inline-block;
+    height: 100%;
+    padding: 15px 0px;
+`
+
+export const MenuItem = Styled.div`
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #1e3c72;
+    ${({ active }) => active && `
+        background: #1e3c72;
+        a {
+            color: #fff;
+        }
+    `}
+`
+
+export const Menu = Styled.div`
+    display: flex;
+    border-bottom: 1px solid #1e3c72;
+    justify-content: center;
+    div:last-child {
+        border-right: none;
+        border-top-right-radius: 8px;
+    }
+    div:first-child {
+        border-top-left-radius: 8px;
+    }
 `
 

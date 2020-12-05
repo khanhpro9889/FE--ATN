@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import './App.css';
-import { BrowserRouter as Router } from 'react-router-dom';
 import NavBar from './navigation/NavBar';
 import Footer from './components/Footer';
 import Wrapper from './components/Wrapper';
@@ -53,7 +52,11 @@ import {
   faCheckCircle, 
   faBriefcase, 
   faUser,
-  faHeart
+  faHeart,
+  faGlobeAsia,
+  faClock,
+  faBell,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons'
 import { faStar as fasStar, faHeart as faHeart1 } from '@fortawesome/free-regular-svg-icons'
 import ImageView from './components/ImageView';
@@ -105,13 +108,20 @@ library.add(
   faBriefcase,
   faUser,
   faHeart,
-  faHeart1
+  faHeart1,
+  faGlobeAsia,
+  faClock,
+  faEye,
+  faBell,
+  faTimesCircle
 )
+
 
 function App({open, openChatFrame, closeChatFrame, userProfile, conversation}) {
   const [src, setSrc] = useState(null);
+
   return (
-      <Router>
+      <>
         <ScrollToTopAfterChangePage>
           <Wrapper>
             <NavBar />
@@ -122,7 +132,7 @@ function App({open, openChatFrame, closeChatFrame, userProfile, conversation}) {
             <ImageView src={src} setSrc={setSrc}/>
           </Wrapper>
         </ScrollToTopAfterChangePage>
-      </Router>
+      </>
   );
 }
 

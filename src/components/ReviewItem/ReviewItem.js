@@ -1,4 +1,5 @@
 import React, { useState }from 'react';
+import { parseDate } from '../../utils/date';
 import {
     Wrapper,
     Left, 
@@ -15,47 +16,99 @@ import {
     Button,
     OptionChoice,
     Menu,
-    MenuItem
+    MenuItem,
+    IconButtonWrap,
+    BtnIcon,
+    HeaderLeft
 } from './styles';
+import DialogConfirmDelete from '../../components/DialogConfirmDelete/DialogConfirmDelete';
 
-const ReviewItem = ({isReply}) => {
+const ReviewItem = ({isReply, reply, item, del, replies, author, openEditDialog, highlight}) => {
     const [open, setOpen] = useState(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
     return (
-        <Wrapper isReply={!isReply}>
+        <>
+        <DialogConfirmDelete 
+            openDialog={openDeleteDialog} 
+            handleCloseDialog={() => setOpenDeleteDialog(false)}
+            handleAgree={() => del()}
+            handleDisagree={() => setOpenDeleteDialog(false)}
+        />
+        <Wrapper highlight={highlight} isReply={!isReply}>
             <FlexBox>
                 <Left>
-                    <Avatar src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"/>
+                    <Avatar src={item.author.profileImg}/>
                 </Left>
                 <Right>
                     <Header>
-                        <Name>Hồ Gia Khánh</Name>
-                        {!isReply && <Stars>
-                            <Icon icon={['fas', 'star']} />
-                            <Icon icon={['fas', 'star']} />
-                            <Icon icon={['fas', 'star']} />
-                            <Icon icon={['fas', 'star']} />
-                            <Icon icon={['fas', 'star']} />
-                        </Stars>}
-                        <OptionChoice>
-                            <Button onClick={() => setOpen(!open)}><Icon icon={['fas', 'ellipsis-v']}/></Button>
+                        <HeaderLeft>
+                            <Name>{item.author.name}</Name>
+                            {!isReply && (
+                                <>
+                                    {item.rating === 1 && <Stars>
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                    </Stars>}
+                                    {item.rating === 2 && <Stars>
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                    </Stars>}
+                                    {item.rating === 3 && <Stars>
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                    </Stars>}
+                                    {item.rating === 4 && <Stars>
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['far', 'star']} />
+                                    </Stars>}
+                                    {item.rating === 5 && <Stars>
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                        <Icon icon={['fas', 'star']} />
+                                    </Stars>}
+                                </>
+                            )}
+                            <Date>{parseDate(item.createAt)}</Date>
+                        </HeaderLeft>
+                        {(author && ((author._id === item.author._id) || author.role === 'admin'))  && <OptionChoice>
+                            <IconButtonWrap
+                                color="primary"
+                                component="span"
+                                onClick={() => setOpen(!open)}
+                            >
+                                <BtnIcon icon={['fas', 'ellipsis-v']} />
+                            </IconButtonWrap>
                             {open && <Menu>
-                                <MenuItem>Xoá</MenuItem>
-                                <MenuItem>Sửa</MenuItem>
+                                <MenuItem onClick={() => setOpenDeleteDialog(true)}>Xoá</MenuItem>
+                                <MenuItem onClick={() => openEditDialog()}>Sửa</MenuItem>
                             </Menu>}
-                        </OptionChoice>
+                        </OptionChoice>}
                     </Header>
-                    <Date>2020/09/27</Date>
                 </Right>
             </FlexBox>
             <Body>
-                Dhanula shared good information about leopard behavior, habitat and thaught identification techniques. He shared wonderful stories about them. Hope to see them soon in wild. It was a fun session, good for family.
+                {item.body}
             </Body>
             <Footer>
-                <Button><Icon icon={['fas', 'thumbs-up']}/> 12</Button>
-                {!isReply && <Button><Icon icon={['fas', 'reply']}/></Button>}
+                {!isReply && <Button onClick={() => reply()}>Trả lời ({item.replyQuantity})</Button>}
             </Footer>
         </Wrapper>
+        </>
     );
 };
 

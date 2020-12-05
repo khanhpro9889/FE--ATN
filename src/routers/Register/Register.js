@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-
 import { RegisterWrap, Parents, Title } from './styles';
 import RegisterForm from './RegisterForm';
 import RegisterBanner from '../../assets/images/register-banner.jpg';

@@ -3,58 +3,26 @@ import { useParams } from 'react-router-dom';
 import { updateProfile } from '../../store/Profile/ProfileAction';
 import { connect } from 'react-redux';
 import ProfileLayout from '../../layouts/ProfileLayout';
-import { Wrapper, ButtonAdd, Icon, Title, FlexBox, Left, Right, IconBtn, WrapperTab} from './styles';
-import { getAllGymsByUser } from '../../api/gymApi';
+import { Wrapper, ButtonAdd, Icon, Title, FlexBox, Left, Right, IconBtn, WrapperDialog, Section, SubTitle, LoadingDiv } from './styles';
+import { getAllGymsByUser, addGym } from '../../api/gymApi';
 import GymItem from '../../components/GymItem';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import MiniLoadingSpinner from '../../components/MiniLoadingSpinner';
 import DialogConfirmDelete from '../../components/DialogConfirmDelete';
-import { deleteGym } from '../../api/gymApi';
+import { deleteGym, deleteGym1st, deleteGym2nd } from '../../api/gymApi';
 import SnackBar from '../../components/SnackBar';
 import { getUserProfileApi } from '../../api/userApi';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import AddGym from '../AddGym/AddGym';
-import { getSavesByUser } from '../../api/saveApi';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { useHistory } from 'react-router-dom';
+import FixedLoadingSpinner from '../../components/FixedLoadingSpinner';
+import { TextField } from '@material-ui/core';
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-  
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box p={3}>
-            <Typography component={'span'} variant={'body2'}>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    );
-  }
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
-  
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
-    },
-}));
-
-const ProfilePage = ({profile}) => {
+const ProfilePage = ({profile, loaded}) => {
     const { id } = useParams();
     const [gyms, setGyms] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -64,28 +32,30 @@ const ProfilePage = ({profile}) => {
     const [openSnackBarDeleteFail, setOpenSnackBarDeleteFail] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
     const [loadingProfile, setLoadingProfile] = useState(false);
-    const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-    const [add, setAdd] = useState(false);
-    const [saves, setSaves] = useState([]);
+    const [openDialogAdd, setOpenDialogAdd] = useState(false);
+    const history = useHistory();
+    const [gym1, setGym1] = useState([]);
+    const [gym2, setGym2] = useState([]);
+    const [gym3, setGym3] = useState([]);
+    const [loading1, setLoading1] = useState(false);
+    const [openDialogCode, setOpenDialogCode] = useState(false);
+    const [openDialogConfirmDeleteCode, setOpenDialogConfirmDeleteCode] = useState(false);
+    const [code, setCode] = useState('');
+    const [openSnackBarTimesup, setOpenSnackBarTimesup] = useState(false);
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
-
+    const handleAddGym = async () => {
+        try {
+            const res = await addGym({uid: profile._id});
+            history.push(`/add-a-gym/title/${res._id}`);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
     useEffect(() => {  
         fetchGyms(id);
         getUserProfile();
-        const getSavesByUserApi = async (uid) => {
-            try {
-              const res = await getSavesByUser(uid);
-              console.log(res);
-              setSaves(res.saves);
-            } catch(err) {
-              console.log(err);
-            }
-        }
-        getSavesByUserApi(id);
+         // eslint-disable-next-line
     }, [id])
 
     const getUserProfile = async () => {
@@ -104,7 +74,18 @@ const ProfilePage = ({profile}) => {
         try {
             setLoading(true);
             const res = await getAllGymsByUser(id);
-            setGyms(res.gyms);
+            const g = res.gyms.map(item => {
+                return (
+                    {
+                        ...item._doc,
+                        reviews: item.reviews
+                    }
+                )
+            })
+            setGym1(g.filter(item => item.approve === true && item.complete === true));
+            setGym2(g.filter(item => item.complete === false));
+            setGym3(g.filter(item => item.complete === true && item.approve === false));
+            setGyms(g);
             setLoading(false);
         } catch (err) {
             setLoading(false);
@@ -117,11 +98,52 @@ const ProfilePage = ({profile}) => {
         setOpenDialogConfirmDelete(true);
     }
 
+    const handleDeleteGymCode = (id) => {
+        setSelectedGym(id);
+        setOpenDialogConfirmDeleteCode(true);
+    }
+
+    const deleteGym1stApi = async () => {
+        try {
+            const res = await deleteGym1st(selectedGym, {email: profile.email});
+            if (res) {}
+            setOpenDialogCode(true);
+        } catch (error) {
+            setOpenSnackBarDeleteFail(false);
+        }
+    }
+
+    const deleteGym2ndApi = async () => {
+        try {
+            const res = await deleteGym2nd(selectedGym, {token: code});
+            if (res) {
+                if (res.messages === 'Delete successfully') {
+                    setOpenSnackBar(true);
+                    setSelectedGym(null);
+                    fetchGyms(id);
+                    setOpenDialogCode(false);
+                }
+                if (res.data.messages === `Fail`) {
+                    setOpenSnackBarDeleteFail(true);
+                }
+                if (res.data.messages === `time's up`) {
+                    setOpenSnackBarTimesup(true);
+                    setOpenDialogCode(false);
+                }
+            }
+        } catch (error) {
+            setOpenSnackBarDeleteFail(false);
+        }
+    }
+
     const deleteGymApi = async () => {
         try {
+            setLoading1(true);
             await deleteGym(selectedGym);
+            setLoading1(false);
+            setSelectedGym(null);
             setOpenSnackBar(true);
-            fetchGyms();
+            fetchGyms(id);
         } catch (err) {
             setOpenSnackBarDeleteFail(true);
             console.log(err);
@@ -136,74 +158,156 @@ const ProfilePage = ({profile}) => {
         if (reason === 'clickaway') {
             return;
         }
+        setOpenSnackBarTimesup(false);
         setOpenSnackBar(false);
         setOpenSnackBarDeleteFail(false);
     }
 
     return (
         <>
+        {loading1 && <FixedLoadingSpinner />}
         <SnackBar open={openSnackBar} message="Xóa thành công" handleClose={handleCloseSnackBar} type="success"/>
+        <SnackBar open={openSnackBarTimesup} message="Mật mã đã hết hạn" handleClose={handleCloseSnackBar} type="success"/>
         <SnackBar open={openSnackBarDeleteFail} message="Có lỗi xảy ra" handleClose={handleCloseSnackBar} type="error"/>
+        {/* form xác nhận thêm */}
+        <Dialog
+            open={openDialogAdd}
+            onClose={() => setOpenDialogAdd(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <WrapperDialog>
+                <DialogTitle id="alert-dialog-title">Xác nhận thêm phòng gym?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Thêm 1 phòng gym trải qua 8 bước
+                        <br />
+                        Bạn có thực sự muốn thêm một phòng gym?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleAddGym} color="primary" autoFocus>
+                        Đồng ý
+                    </Button>
+                    <Button onClick={() => setOpenDialogAdd(false)} color="primary">
+                        Hủy
+                    </Button>
+                </DialogActions>
+            </WrapperDialog>
+        </Dialog>
+        {/* form nhập code để xóa */}
+        <Dialog
+            open={openDialogCode}
+            onClose={() => setOpenDialogAdd(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <WrapperDialog>
+                <DialogTitle id="alert-dialog-title">Xác nhận xóa phòng gym?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Nhập code đã gửi vào email của bạn để xóa
+                    </DialogContentText><br />
+                    <TextField value={code} onChange={(e) => setCode(e.target.value)} max={4}/>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={deleteGym2ndApi} color="primary" autoFocus>
+                        Đồng ý
+                    </Button>
+                    <Button onClick={() => setOpenDialogCode(false)} color="primary">
+                        Hủy
+                    </Button>
+                </DialogActions>
+            </WrapperDialog>
+        </Dialog>
+        {/* form xác nhận xóa */}
         <DialogConfirmDelete 
             openDialog={openDialogConfirmDelete} 
             handleCloseDialog={handleCloseDialog}
             handleAgree={deleteGymApi}
             handleDisagree={handleCloseDialog}
         />
-        <ProfileLayout userProfile={userProfile} loadingProfile={loadingProfile} getUserProfile={getUserProfile}>
+        {/* form xác nhận xóa code */}
+        <DialogConfirmDelete 
+            openDialog={openDialogConfirmDeleteCode} 
+            handleCloseDialog={() => setOpenDialogConfirmDeleteCode(false)}
+            handleAgree={deleteGym1stApi}
+            handleDisagree={() => setOpenDialogConfirmDeleteCode(false)}
+        />
+        <ProfileLayout userProfile={userProfile} loadingProfile={loadingProfile} getUserProfile={getUserProfile} id={id}>
             <Wrapper>
-                <div className={classes.root}>
-                    <AppBar position="static">
-                        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-                        <Tab label="Phòng gyms" {...a11yProps(0)} />
-                        <Tab label="Item Two" {...a11yProps(1)} />
-                        <Tab label="Đã lưu" {...a11yProps(2)} />
-                        </Tabs>
-                    </AppBar>
-                    <WrapperTab>
-                        <TabPanel value={value} index={0}>
-                            {!add ? <>
-                                {(profile && (profile._id === id)) &&
-                                    <div><ButtonAdd text="Thêm mới" onClick={() => setAdd(true)}/></div>
-                                }
-                                {loading && <LoadingSpinner />}
-                                {gyms && gyms.length === 0 && <Title>
-                                    <Icon icon={['fas', 'folder-open']}></Icon>
-                                    <div>Bạn chưa đăng phòng gym nào</div>
-                                </Title>}
-                                {gyms && gyms.length > 0 && gyms.map(item => {
-                                    return (
-                                        <FlexBox key={item._id}>
-                                            <Left>
-                                                <GymItem gym={item}/>     
-                                            </Left>
-                                            {(!profile || (profile && (profile._id === id))) && <Right>
-                                                <IconBtn onClick={() => handleDeleteGym(item._id)}>
-                                                    <Icon icon={['fa', 'trash']} />
-                                                </IconBtn>
-                                                <IconBtn>
-                                                    <Icon icon={['fa', 'pen']} />
-                                                </IconBtn>
-                                            </Right>}
-                                        </FlexBox>
-                                    )
-                                })} </> : <AddGym profile={profile} back={() => setAdd(false)}/>
-                            }
-                        </TabPanel>
-                        <TabPanel value={value} index={1}>
-                            
-                        </TabPanel>
-                        <TabPanel value={value} index={2}>
-                            {saves.length === 0 && <Title>
-                                <Icon icon={['fas', 'folder-open']}></Icon>
-                                <div>Bạn chưa lưu phòng gym nào</div>
-                            </Title>}
-                            {saves && saves.map(item => {
-                                return <GymItem key={item._id} gym={item.gym}/>
-                            })}
-                        </TabPanel>
-                    </WrapperTab>
-                </div>
+            {(profile && (profile._id === id)) &&
+                <div><ButtonAdd text="Thêm mới" onClick={() => setOpenDialogAdd(true)}/></div>
+            }
+                {loading && <LoadingSpinner />}
+                {gyms && gyms.length === 0 && <Title>
+                    <Icon icon={['fas', 'folder-open']}></Icon>
+                    <div>Không có phòng gym nào</div>
+                </Title>}
+                {gym1 && gym1.length > 0 ? <Section>
+                    <SubTitle>Phòng đang được hiển thị</SubTitle>
+                    {gym1.map(item => {
+                        return (
+                            <FlexBox key={item._id}>
+                                <Left>
+                                    <GymItem gym={item}/>     
+                                </Left>
+                                {(!profile || (profile && (profile._id === id))) && <Right>
+                                    <IconBtn onClick={() => handleDeleteGymCode(item._id)}>
+                                        <Icon icon={['fa', 'trash']} />
+                                    </IconBtn>
+                                    <IconBtn onClick={() => history.push(`/add-a-gym/title/${item._id}`)}>
+                                        <Icon icon={['fa', 'pen']} />
+                                    </IconBtn>
+                                </Right>}
+                            </FlexBox>
+                        )
+                    })}
+                </Section> : loaded && profile && profile._id !== id && <SubTitle>Không có phòng gym nào</SubTitle>}
+                {!loaded ? <LoadingDiv>
+                    <MiniLoadingSpinner />
+                </LoadingDiv> : profile && profile._id === id && gym2 && gym2.length > 0 && <Section>
+                    <SubTitle>Phòng bạn đang thêm</SubTitle>
+                    {gym2.map(item => {
+                        return (
+                            <FlexBox key={item._id}>
+                                <Left>
+                                    <GymItem gym={item}/>     
+                                </Left>
+                                {(!profile || (profile && (profile._id === id))) && <Right>
+                                    <IconBtn onClick={() => handleDeleteGym(item._id)}>
+                                        <Icon icon={['fa', 'trash']} />
+                                    </IconBtn>
+                                    <IconBtn onClick={() => history.push(`/add-a-gym/title/${item._id}`)}>
+                                        <Icon icon={['fa', 'pen']} />
+                                    </IconBtn>
+                                </Right>}
+                            </FlexBox>
+                        )
+                    })}
+                </Section>}
+                {!loaded ? <LoadingDiv>
+                    <MiniLoadingSpinner />
+                </LoadingDiv> : profile && profile._id === id && gym3 && gym3.length > 0 && <Section>
+                    <SubTitle>Phòng bạn đang chờ duyệt</SubTitle>
+                    {gym3.map(item => {
+                        return (
+                            <FlexBox key={item._id}>
+                                <Left>
+                                    <GymItem gym={item}/>     
+                                </Left>
+                                {(!profile || (profile && (profile._id === id))) && <Right>
+                                    <IconBtn onClick={() => handleDeleteGym(item._id)}>
+                                        <Icon icon={['fa', 'trash']} />
+                                    </IconBtn>
+                                    <IconBtn onClick={() => history.push(`/add-a-gym/title/${item._id}`)}>
+                                        <Icon icon={['fa', 'pen']} />
+                                    </IconBtn>
+                                </Right>}
+                            </FlexBox>
+                        )
+                    })}
+                </Section>}
             </Wrapper>
         </ProfileLayout>
         </>
@@ -213,6 +317,7 @@ const ProfilePage = ({profile}) => {
 const mapStateToProps = (state) => {
     return {
         profile: state.ProfileReducer.userProfile,
+        loaded: state.ProfileReducer.loaded
     }
 }
 

@@ -31,7 +31,7 @@ const ChatFrameReducer = (state = initialState, action) => {
                 conversation: null
             }
         }
-        default: 
+        default:
             return state;
     }
 }

@@ -12,10 +12,11 @@ import {
     ClearFix,
     Item
 } from './styles';
+import { roundNumber } from '../../utils/number';
 
 const GymItemV2 = ({gym}) => {
     return (
-        <Wrap>
+        <Wrap to={`/detail/${gym._id}`}>
             <WrapLeft>
                 <Thumnail src={gym.gallery[0].path}>
                     <ClearFix>
@@ -28,9 +29,13 @@ const GymItemV2 = ({gym}) => {
                 </Thumnail>
             </WrapLeft>
             <WrapRight>
-                <Span><Icon icon={['fas', 'star']}/>8.5 (21)</Span>
-                <Name to={`/detail/${gym._id}`}>{gym.title}</Name>
-                <Address>{gym.address}, {gym.district.path_with_type}</Address>
+                <Span><Icon icon={['fas', 'star']}/>
+                    {gym.reviews.length > 0 ? roundNumber(gym.reviews.reduce((sum, item) => {
+                        return sum + item.rating;
+                    }, 0) / gym.reviews.length) : 0} ({gym.reviews.length} đánh giá)
+                </Span>
+                <Name>{gym.title}</Name>
+                <Address>{gym.addresses.address}, {gym.addresses.district.path_with_type}</Address>
             </WrapRight>
         </Wrap>
     );

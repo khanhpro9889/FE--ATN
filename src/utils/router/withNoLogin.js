@@ -1,16 +1,16 @@
 import React from 'react';
-
 import { connect } from 'react-redux';
 import { LOGIN_PATH } from '../../constants/Path';
 import { Redirect, Route } from 'react-router-dom';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const WithNoLogin = ({ userProfile, loadingProfile, component, ...rest }) => {
-    console.log(userProfile);
     return (
         <>
             {
-                !loadingProfile && !userProfile ? <Redirect to={LOGIN_PATH}/>
-                : <Route component={component} {...rest}/>
+                !loadingProfile ? <LoadingSpinner /> : 
+                (!userProfile ? <Redirect to={LOGIN_PATH}/>
+                : <Route component={component} {...rest}/>)
             }
         </>
     );
@@ -19,7 +19,7 @@ const WithNoLogin = ({ userProfile, loadingProfile, component, ...rest }) => {
 const mapStateToProps = (state) => {
     return {
         userProfile: state.ProfileReducer.userProfile,
-        loadingProfile: state.ProfileReducer.loading
+        loadingProfile: state.ProfileReducer.loaded
     }
 }
 

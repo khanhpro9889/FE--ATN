@@ -5,7 +5,7 @@ export const Wrap = Styled.div`
   display: inline-block;
   .MuiCircularProgress-colorPrimary {
     color: #1e3c72;
-    margin-top: 20px;
+    //margin-top: 20px;
   }
 `
 

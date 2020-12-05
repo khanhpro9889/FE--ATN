@@ -5,7 +5,7 @@ import {
     CLEAR_PROFILE,
     UPDATE_PROFILE
 } from './ProfileActionType';
-import { getUserProfileApi } from '../../api/userApi';
+import { getUserProfileAuthApi } from '../../api/userApi';
 import jwtDecode from 'jwt-decode';
 
 export const getUserProfileRequest = () => {
@@ -45,11 +45,13 @@ export const getUserProfile = () => {
     return async (dispatch) => {
         try {
             if(localStorage.getItem('token')) {
-                const decoded = jwtDecode(localStorage.getItem('token'));
+                const decoded = jwtDecode(localStorage.getItem('token').split(' ')[1]);
                 dispatch(getUserProfileRequest());
-                const user = await getUserProfileApi(decoded.userId);
+                const user = await getUserProfileAuthApi(decoded.userId);
                 dispatch(getUserProfileSuccess(user));
-            } 
+            } else {
+                dispatch(getUserProfileFailure());
+            }
         } catch (err) {
             dispatch(getUserProfileFailure(err));
         }

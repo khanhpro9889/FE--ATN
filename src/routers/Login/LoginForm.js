@@ -55,7 +55,7 @@ const LoginForm = ({onSubmit, loading}) => {
                     'Mật khẩu tối thiểu 7 ký tự')}
             />
             <ResetLink to={RESET_PASSWORD_PATH}>Quên mật khẩu?</ResetLink>
-            {loading ? <MiniLoadingSpinner /> : <LoginButton onClick={handleSubmit(onSubmit)} text="Đăng nhập" />} hoặc <StyledLink to={REGISTER_PATH}>Đăng ký</StyledLink>
+            {loading ? <MiniLoadingSpinner /> : <LoginButton type="submit" onClick={handleSubmit(onSubmit)} text="Đăng nhập" />} hoặc <StyledLink to={REGISTER_PATH}>Đăng ký</StyledLink>
         </form>
     );
 };

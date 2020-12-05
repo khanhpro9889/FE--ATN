@@ -1,6 +1,5 @@
 import React from 'react';
-import { Wrapper, Description, Price, Name, Icon, DeleteButton } from './styles';
-import { numberWithCommas } from '../../utils/number';
+import { Wrapper, Description, Name, Icon, DeleteButton } from './styles';
 
 const ServiceItem = ({serviceItem, deleteItem}) => {
     return (
@@ -12,8 +11,8 @@ const ServiceItem = ({serviceItem, deleteItem}) => {
                 </DeleteButton>}
             </div>
             
-            <Description><Icon icon={['fas', 'info-circle']} />{serviceItem.description}</Description>
-            <Price><Icon icon={['fas', 'dollar-sign']} />{numberWithCommas(serviceItem.price)} <span>{serviceItem.unitPricing}</span></Price>
+            <Description>{serviceItem.description}</Description>
+            {/* <Price><Icon icon={['fas', 'dollar-sign']} />{numberWithCommas(serviceItem.price)} <span>{serviceItem.unitPricing}</span></Price> */}
         </Wrapper>
     );
 };

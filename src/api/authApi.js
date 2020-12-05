@@ -59,3 +59,13 @@ export const resetPassword2nd = async (body) => {
         return err;
     }
 }
+
+export const verifyRegister = async (body) => {
+    const url = 'http://localhost:3001/auth/verify';
+    try {
+        const res = await axiosClient.post(url, body);
+        return res;
+    } catch(err) {
+        return err;
+    }
+}

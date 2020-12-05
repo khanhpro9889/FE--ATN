@@ -1,4 +1,5 @@
 export function validateEmail(value) {
+     // eslint-disable-next-line
     return /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/i.test(value)
         ? true
         : false
@@ -15,6 +16,12 @@ export function validatePhone(value) {
 
 export function validateNumber(value) {
     return /^[1-9][0-9]*$/i.test(value)
+        ? true
+        : false
+}
+
+export function validateTime24(value) {
+    return /^([01][0-9]|2[0-3]):([0-5][0-9])$/i.test(value)
         ? true
         : false
 }

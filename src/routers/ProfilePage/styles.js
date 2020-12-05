@@ -84,3 +84,44 @@ export const IconBtn = Styled(IconButton)`
 export const Greeting = Styled.div`
   font-size: 44px;
 `
+
+export const WrapperDialog = Styled.div`
+    .MuiDialogActions-root {
+        button:nth-child(1) {
+            background: #1e3c72;
+            color: #fff;
+            border: 1px solid #1e3c72;
+        }
+        button:nth-child(2) {
+            background: #fff;
+            color: #1e3c72;
+            border: 1px solid #1e3c72;
+        }
+    }
+    .MuiFormControl-root {
+      width: 100%;
+    }
+    input {
+      width: 100%;
+      text-align: center;
+      border: 2px solid #1e3c72;
+      border-radius: 5px;
+      padding: 10px 20px;
+    }
+`
+
+export const Section = Styled.div`
+  padding: 20px 0px;
+`
+
+export const SubTitle = Styled.h3`
+
+`
+
+export const LoadingDiv = Styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+`

@@ -8,6 +8,27 @@ const ChatBtn = ({openChatFrame, uid}) => {
     const [unread, setUnread] = useState(false);
 
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getConversation(uid);
+                for(var i = 0; i < res.conversations.length; i++) {
+                    if(res.conversations[i].user1._id === uid) {
+                        if(res.conversations[i].unread1) {
+                            setUnread(true);
+                            break;
+                        }
+                    }
+                    if(res.conversations[i].user2._id === uid) {
+                        if(res.conversations[i].unread2) {
+                            setUnread(true);
+                            break;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
         fetchData();
         const socket = socketIOClient('http://localhost:3001');
         socket.on(`conversations ${uid}`, data => {
@@ -16,29 +37,7 @@ const ChatBtn = ({openChatFrame, uid}) => {
         return () => {
             socket.close();
         }
-    }, [])
-
-    const fetchData = async () => {
-        try {
-            const res = await getConversation(uid);
-            for(var i = 0; i < res.conversations.length; i++) {
-                if(res.conversations[i].user1._id === uid) {
-                    if(res.conversations[i].unread1) {
-                        setUnread(true);
-                        break;
-                    }
-                }
-                if(res.conversations[i].user2._id === uid) {
-                    if(res.conversations[i].unread2) {
-                        setUnread(true);
-                        break;
-                    }
-                }
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    }, [uid])
 
     return (
         <Wrapper onClick={() => openChatFrame()}>

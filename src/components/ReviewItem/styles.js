@@ -1,10 +1,14 @@
 import  Styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton } from '@material-ui/core';
 
 export const Wrapper = Styled.div`
     margin-bottom: 15px;
     ${({ isReply }) => !isReply && `
         padding-left: 25px;
+    `}
+    ${({ highlight }) => highlight && `
+        background: #eee;
     `}
 `
 
@@ -27,6 +31,8 @@ export const Right = Styled.div`
 export const Avatar = Styled.img`
     width: 40px;
     height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 `
 
 export const Name = Styled.span`
@@ -43,7 +49,9 @@ export const Date = Styled.div`
 `
 
 export const Stars = Styled.span`
-
+    svg {
+        color: #1e3c72
+    }
 `
 
 export const Icon = Styled(FontAwesomeIcon)`
@@ -51,17 +59,25 @@ export const Icon = Styled(FontAwesomeIcon)`
 `
 
 export const Header = Styled.div`
+    display: flex;
+    justify-content: space-between;
+`
+
+export const HeaderLeft = Styled.div`
 
 `
 
 export const Body = Styled.div`
-    font-size: 18px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 `
 
 export const Footer = Styled.div`
-
+    .MuiButtonBase-root {
+        padding: 0px;
+        margin-right: 10px;
+    }
 `
 
 export const Button = Styled.div`
@@ -79,8 +95,16 @@ export const Button = Styled.div`
     
 ` 
 
+export const BtnIcon = Styled(FontAwesomeIcon)`
+    color: #1e3c72;
+    font-size: 14px;
+`
+
+export const IconButtonWrap = Styled(IconButton)`
+
+`
+
 export const OptionChoice = Styled.div`
-    float: right;
     display: inline-block;
     position: relative;
 `
@@ -94,6 +118,7 @@ export const Menu = Styled.div`
     right: 10px;
     padding: 5px;
     z-index: 3;
+    background: #fff;
 `
 
 export const MenuItem = Styled.div`

@@ -16,10 +16,8 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(async (config) => {
     if(localStorage.getItem('token')) {
         const token = localStorage.getItem('token');
-        config.headers.Authorization =  token;
+        config.headers.Authorization = token;
     } 
-    
-
     return config;
 })
 axiosClient.interceptors.response.use((response) => {
@@ -29,9 +27,9 @@ axiosClient.interceptors.response.use((response) => {
     return response;
 }, (error) => {
     if(error.response.status === 401) {
-        
+        localStorage.removeItem('token');
     }
-    
+    return error.response;
 });
 
 export default axiosClient;

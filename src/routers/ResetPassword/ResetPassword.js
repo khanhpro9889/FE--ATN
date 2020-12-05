@@ -27,7 +27,6 @@ const ResetPassword = props => {
         setLoading(true);
         const res = await resetPassword(value);
         setLoading(false);
-        console.log(res);
         if(res.message === 'Waiting verify') {
             setOpenSnackBar(true);
         } else {

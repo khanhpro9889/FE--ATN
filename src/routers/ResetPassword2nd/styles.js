@@ -9,7 +9,7 @@ export const Parents = Styled.div`
     background: ${props => 'url(' + props.src + ')'};
     background-position: center center;
     background-size: cover;
-    min-height: 100vh;
+    min-height: calc(100vh - 139px);
     form {
         z-index:290;
         position: relative;

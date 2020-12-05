@@ -23,12 +23,19 @@ import {
     DeleteMessage,
     Div,
     Upload,
-    Parents
+    Parents,
+    WrapperBodyMessage,
+    IconButtonWrap,
+    BtnIcon,
+    QuestionBox,
+    Question
 } from './styles';
 import { getConversation, getMessages, addMessage, deleteMessage } from '../../api/conversationApi';
+import { getByGym } from '../../api/boxMessageApi';
 import { parseDate } from '../../utils/date';
 import socketIOClient from 'socket.io-client';
 import DialogConfirmDelete from '../DialogConfirmDelete';
+import { Button } from '@material-ui/core';
 
 const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
     const [conversations, setConversations] = useState([]);
@@ -44,14 +51,24 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
     const [openDialogConfirmDelete, setOpenDialogConfirmDelete] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [visible, setVisible] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [boxMessage, setBoxMessage] = useState([]);
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        const fetchData = async () => {
+            try {
+                const res = await getConversation(uid);
+                setConversations(res.conversations);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchData();
+    }, [uid])
 
     useEffect(() => {
-        console.log(conversation);
-        setSelectedConversation(conversation);
+        if (conversation)
+            setSelectedConversation(conversation);
     }, [conversation])
 
     useEffect(() => {
@@ -67,6 +84,20 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
                 socket.close();
         }
     }, [selectedConversation]);
+
+    useEffect(() => {
+        const getBoxMessage = async () => {
+            try {
+                const res = await getByGym(selectedConversation.gym._id);
+                setBoxMessage(res.boxMessage);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        if (selectedConversation) {
+            getBoxMessage();
+        }
+    }, [selectedConversation])
 
     const onFileChange = (event) => {
         if (event.target.files.length > 0) {
@@ -89,16 +120,6 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
         chatBottom.current.scrollIntoView({ behavior: 'smooth' });
     }
 
-    const fetchData = async () => {
-        try {
-            const res = await getConversation(uid);
-            console.log(res);
-            setConversations(res.conversations);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
     const fetchMessages = async () => {
         try {
             const res = await getMessages({conversationId: selectedConversation._id, uid, page});
@@ -109,6 +130,32 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
             }
         } catch (err) {
             console.log(err);
+        }
+    }
+
+    const handleSendBoxMessage = async (msg) => {
+        let receiver;
+        if(selectedConversation.user1._id === uid) {
+            receiver = selectedConversation.user2._id;
+        } else {
+            receiver = selectedConversation.user1._id;
+        }
+        try {
+            const formData = new FormData();
+            formData.append('sender', uid);
+            formData.append('receiver', receiver);
+            //formData.append('img', image);
+            formData.append('conversationId', selectedConversation._id);
+            formData.append('creatAt', new Date());
+            formData.append('body', msg);
+            const res = await addMessage(formData);
+            if (res) {}
+            setOpen(false);
+            scrollToBottom();
+        } catch (err) {
+            setOpen(false);
+            console.log(err);
+            setSendedMessage('');
         }
     }
 
@@ -129,13 +176,13 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
             formData.append('creatAt', new Date());
             formData.append('body', sendedMessage);
             const res = await addMessage(formData);
+            if (res) {}
             setImageSrc(null);
             setImage(null);
             setSendedMessage('');
             scrollToBottom();
         } catch (err) {
             console.log(err);
-            console.log("Abc");
             setSendedMessage('');
         }
     }
@@ -157,11 +204,12 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
         setOpenDialogConfirmDelete(true);
        
     }
-
+   
     useEffect(() => {
         if(selectedConversation) {
             fetchMessages();
         }    
+         // eslint-disable-next-line
     }, [selectedConversation, flagMessage, page])
 
     return (
@@ -189,12 +237,32 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
                 }}>Chat</Header>
                 <Body>
                     <Left>
-                        {selectedConversation && <Name>
-                            {
+                        {selectedConversation && <><Name>
+                            <span>{
                                 uid === selectedConversation.user1._id ? 
                                 selectedConversation.gym.title + ', Host by: ' + selectedConversation.user2.name : selectedConversation.user1.name + ', about: ' + selectedConversation.gym.title
-                            }
-                        </Name>}
+                            }</span>
+                            {boxMessage.length > 0 && <IconButtonWrap
+                                color="primary"
+                                aria-label="upload picture"
+                                component="span"
+                                onClick={() => setOpen(!open)}
+                            >
+                                <BtnIcon icon={['fas', 'bars']} />
+                            </IconButtonWrap>}
+                        </Name>
+                        {open && 
+                        <QuestionBox>
+                            {boxMessage && boxMessage.map(item => {
+                                return (
+                                    <Question key={item._id}>
+                                        <Button onClick={() => handleSendBoxMessage(item.question)}>{item.question}</Button>
+                                    </Question>
+                                )
+                            })}
+                        </QuestionBox>}
+                        </>}
+                        
                         <BoxMessage>
                             {selectedConversation && 
                                 <><div>
@@ -206,22 +274,26 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
                                             return (
                                                 <Sender key={item._id}>
                                                     <NameMessage>Bạn</NameMessage>
-                                                    <DeleteMessage onClick={() => {
-                                                        handleDeleteMessage(item._id);
-                                                    }}>
-                                                        Xóa
-                                                    </DeleteMessage>
-                                                    {item.body && <BodyMessage>{item.body}</BodyMessage>}
-                                                    {item.image && <Image onClick={() => setSrc(item.image)}><img alt="image" src={item.image}/></Image>}
-                                                    <Time>{parseDate(item.createAt)}</Time>
+                                                    <WrapperBodyMessage>
+                                                        <DeleteMessage onClick={() => {
+                                                            handleDeleteMessage(item._id);
+                                                        }}>
+                                                            Xóa
+                                                        </DeleteMessage>
+                                                        {item.body && <BodyMessage>{item.body}</BodyMessage>}
+                                                        {item.image && <Image onClick={() => setSrc(item.image)}><img alt="alt" src={item.image}/></Image>}                                                   
+                                                    </WrapperBodyMessage>
+                                                    <Time>{parseDate(item.createAt)}</Time>  
                                                 </Sender>
                                             )
                                         if(item.receiver._id === uid)
                                             return (
                                                 <Receiver key={item._id}>
                                                     <NameMessage>{item.sender.name}</NameMessage>
-                                                    {item.body && <BodyMessage>{item.body}</BodyMessage>}
-                                                    {item.image && <Image onClick={() => setSrc(item.image)}><img alt="image" src={item.image}/></Image>}
+                                                    <WrapperBodyMessage>
+                                                        {item.body && <BodyMessage>{item.body}</BodyMessage>}
+                                                        {item.image && <Image onClick={() => setSrc(item.image)}><img alt="alt" src={item.image}/></Image>}
+                                                    </WrapperBodyMessage> 
                                                     <Time>{parseDate(item.createAt)}</Time>
                                                 </Receiver>
                                             )
@@ -232,12 +304,21 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
                             }
                             {!selectedConversation && <div className="center">Chọn một tin nhắn để xem</div>}
                         </BoxMessage>
-                        {imageSrc && <SelectedImage><img alt="image" src={imageSrc} /><Icon onClick={deleteImage} icon={['fas', 'times']}/></SelectedImage>}
+                        {imageSrc && <SelectedImage><img alt="alt" src={imageSrc} />
+                            <IconButtonWrap
+                                color="primary"
+                                aria-label="upload picture"
+                                component="span"
+                                onClick={deleteImage}
+                            >
+                                <BtnIcon icon={['fas', 'times']} />
+                            </IconButtonWrap>
+                        </SelectedImage>}
                         {selectedConversation && <BoxSend>
                             <Div>
                                 <input value={sendedMessage} type="text" onChange={(e) => setSendedMessage(e.target.value)}/>
                                 <Upload>
-                                    <label for="upload-photo"><Icon icon={['fas', 'camera']} /></label>
+                                    <label><Icon icon={['fas', 'camera']} /></label>
                                     <input onChange={onFileChange} type="file" name="photo" className="upload-photo" accept="image/x-png,image/gif,image/jpeg"/>
                                 </Upload> 
                             </Div>

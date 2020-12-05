@@ -1,5 +1,6 @@
 import Styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Select from '@material-ui/core/Select';
 
 export const Wrapper = Styled.div`
     .image-gallery-image {
@@ -8,6 +9,13 @@ export const Wrapper = Styled.div`
     .image-gallery-play-button {
         display: none;
     }
+`
+
+export const View = Styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
 `
 
 export const Body = Styled.div`
@@ -67,8 +75,22 @@ export const Icon = Styled(FontAwesomeIcon)`
 `
 
 export const SubTitle = Styled.div`
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 10px;
+`
+
+export const Times = Styled.div`
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: flex;
+`
+
+export const LeftDiv = Styled.div`
+    width: 130px;
+`
+
+export const RightDiv = Styled.div`
+    width: calc(100% - 70px);
 `
 
 export const Content = Styled.div`
@@ -122,6 +144,13 @@ export const Host = Styled.div`
 
 export const NameHost = Styled.div`
     font-size: 30px;
+`
+
+export const Item = Styled.div`
+    margin-bottom: 7px;
+    span {
+        font-size: 20px;
+    }
 `
 
 export const ProfileImage = Styled.img`
@@ -181,4 +210,92 @@ export const Save = Styled.div`
     cursor: pointer;
     font-size: 20px;
     margin-right: 20px;
+`
+
+export const StyledSelect = Styled(Select)`
+    border: 2px solid #1e3c72;
+    border-radius: 10px;
+`
+
+export const FilterReview = Styled.div`
+    display: flex;
+    justify-content: flex-end;
+    .MuiInput-underline.Mui-focused::after {
+        display: none;
+    }
+    .MuiInputBase-root {
+        background: #fff;
+        padding-left: 20px;
+        padding-right: 20px;
+        position: relative;
+        margin-left: 15px;
+    }
+    .MuiSelect-root {
+        position:relative;
+        overflow: unset !important;
+    }
+    .MuiSelect-selectMenu {
+        font-family: 'calibri', sans-serif;
+    }
+    .MuiInput-underline::before {
+        display: none;
+    }
+    margin-bottom: 20px;
+`
+
+export const WrapperDialog = Styled.div`
+    h2 {
+        font-size: 24px;
+        text-transform: uppercase;
+    }
+    .MuiDialogActions-root {
+        button:nth-child(1) {
+            background: #1e3c72;
+            color: #fff;
+            border: 1px solid #1e3c72;
+        }
+        button:nth-child(2) {
+            background: #fff;
+            color: #1e3c72;
+            border: 1px solid #1e3c72;
+        }
+    }
+`
+
+
+
+export const FlexBox = Styled.div`
+    display: flex;
+    height: 260px;
+    margin-bottom: 25px;
+`
+
+export const FlexBox1 = Styled.div`
+    display: flex;
+    margin-bottom: 25px;
+`
+
+export const LeftMap = Styled.div`
+    flex: 2;
+    .leaflet-container {
+        width: 100%;
+        height: 100%;
+    }
+`
+
+export const RightMap = Styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding-left: 20px;
+`
+
+export const Element = Styled.div`
+   width: 300px;
+   display: inline-block;
+   margin-right: 20px;
+   @media only screen and (max-width: 480px) {
+       width: 250px;
+   }
 `

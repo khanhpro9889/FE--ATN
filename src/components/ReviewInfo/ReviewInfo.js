@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     SPReviewBox,
     Rate,
@@ -9,13 +9,34 @@ import {
     RateInfor,
     RateBar
 } from './styles';
+import { roundNumber } from '../../utils/number';
 
-const ReviewInfo = () => {
+const ReviewInfo = ({reviews}) => {
+    const [one, setOne] = useState(null);
+    const [two, setTwo] = useState(null);
+    const [three, setThree] = useState(null);
+    const [four, setFour] = useState(null);
+    const [five, setFive] = useState(null);
+
+    useEffect(() => {
+        if (reviews) {
+            setOne(reviews.filter(item => item.rating === 1).length);
+            setTwo(reviews.filter(item => item.rating === 2).length);
+            setThree(reviews.filter(item => item.rating === 3).length);
+            setFour(reviews.filter(item => item.rating === 4).length);
+            setFive(reviews.filter(item => item.rating === 5).length);
+        }
+    }, [reviews])
+
     return (
         <>
             <SPReviewBox>
                 <div>
-                <Rate>2.5</Rate>
+                <Rate>
+                    {reviews.length > 0 ? roundNumber(reviews.reduce((sum, item) => {
+                        return sum + item.rating;
+                    }, 0) / reviews.length) : 0}
+                </Rate>
                 <Star>
                     <Icon
                     icon={[
@@ -26,59 +47,59 @@ const ReviewInfo = () => {
                 </Star>
                 </div>
                 <ReviewDesc>
-                3 đánh giá
+                {reviews && reviews.length} đánh giá
                 </ReviewDesc>
             </SPReviewBox>
             <RateInfor>
                 <RateBar>
-                5 stars
+                <b>5 sao</b>
                 <RateLine
                     variant="determinate"
                     value={
-                    10
+                        five && (five !== 0) ? ((five / reviews.length) * 100) : 0
                     }
                 />
-                ({5})
+                <b>({five})</b>
                 </RateBar>
                 <RateBar>
-                4 stars
+                <b>4 sao</b>
                 <RateLine
                     variant="determinate"
                     value={
-                    20
+                        four && (four !== 0) ? ((four / reviews.length) * 100) : 0
                     }
                 />
-                ({31})
+                <b>({four})</b>
                 </RateBar>
                 <RateBar>
-                3 stars
+                <b>3 sao</b>
                 <RateLine
                     variant="determinate"
                     value={
-                    40
+                        three && (three !== 0) ? ((three / reviews.length) * 100) : 0
                     }
                 />
-                ({22})
+                <b>({three})</b>
                 </RateBar>
                 <RateBar>
-                2 stars
+                <b>2 sao</b>
                 <RateLine
                     variant="determinate"
                     value={
-                    15
+                        two && (two !== 0) ? ((two / reviews.length) * 100) : 0
                     }
                 />
-                ({32})
+                <b>({two})</b>
                 </RateBar>
                 <RateBar>
-                1 stars
+                <b>1 sao</b>
                 <RateLine
                     variant="determinate"
                     value={
-                    15
+                        one && (one !== 0) ? ((one / reviews.length) * 100) : 0
                     }
                 />
-                ({11})
+                <b>({one})</b>
                 </RateBar>
             </RateInfor>
         </>

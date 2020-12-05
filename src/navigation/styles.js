@@ -6,7 +6,15 @@ export const SearchIcon = Styled(FontAwesomeIcon)`
     color: #1e3c72;
 `
 
+export const IconNoti = Styled(FontAwesomeIcon)`
+    font-size: 18px;
+    color: #1e3c72;
+`
+
 export const Nav = Styled.nav`
+    a {
+        margin: 0px;
+    }
     padding: 20px 0px;
     background: #fff;
     z-index: 1000;
@@ -78,9 +86,6 @@ export const Menu = Styled.div`
     flex-direction: row;
     display: flex;
     justify-content: flex-end;
-    >div:nth-child(1), >div:nth-child(2){
-        margin-top: 10px;
-    }
     @media only screen and (max-width: 768px) {
         display: none;
     }
@@ -90,6 +95,10 @@ export const Menu = Styled.div`
 export const WrapItem = Styled.div`
     margin-left: 20px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    position: relative;
     button {
         font-weight: 600;
         color: #1e3c72;
@@ -97,14 +106,18 @@ export const WrapItem = Styled.div`
     a {
         color: #1e3c72 !important;
     }
+    .MuiBadge-root {
+        cursor: pointer;
+    }
 `
 
 export const Brand = Styled.div`
     flex: 1;
     text-transform: uppercase;
     font-size: 26px;
-    padding-top: 5px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
     a {
         color: #1e3c72 !important;
     }
@@ -213,6 +226,8 @@ export const RightLogin = Styled.div`
 
 export const ImgProfile = Styled.img`
     width: 70px;
+    height: 70px;
+    object-fit: cover;
     border-radius: 50%;
 `
 
@@ -221,17 +236,27 @@ export const LoginSection = Styled.div`
     
 `
 
+export const NotiMobile = Styled.div`
+    display: none;
+    @media only screen and (max-width: 768px) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+`
+
 export const SubMenu = Styled.div`
     position: absolute;
     background: #fff;
-    bottom: -78px;
+    bottom: -74px;
     right: 0px;
     width: 150px;
     z-index: 300;
     box-shadow: 0px 0px 10px gray;
-    opacity: 0;
-    visibility: hidden;
     text-align: left;
+    ${({ admin }) => admin && `
+        bottom: -193px;
+    `}
 `
 
 export const AccountMenuWrapper = Styled.div`
@@ -239,10 +264,6 @@ export const AccountMenuWrapper = Styled.div`
     cursor: pointer;
     position: relative;
     z-index: 300;
-    &:hover ${SubMenu} {
-        opacity: 1;
-        visibility: visible;
-    }
 `
 
 export const ImgProfileNav = Styled.img`
@@ -302,4 +323,49 @@ export const LoginButton = Styled(Link)`
     padding: 10px 20px;
     top: 0px;
     right: 0px; 
+`
+
+export const Noti = Styled.div`
+    max-height: 252px;
+    position: absolute;
+    top: calc(100% + 10px);
+    background: #fff;
+    z-index: 100;
+    width: 200px;
+    left: -112px;
+    min-height: 100px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #1e3c7282 #eee;
+    box-shadow: 0px 0px 5px silver;
+    .unread {
+        background: #eee;
+    }
+`
+
+export const ItemNoti = Styled(Link)`
+    padding: 5px 10px;
+    border-top: 0.5px solid silver;
+    border-bottom: 0.5px solid silver;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+`
+
+export const WrapperLoading = Styled.div`
+    height: 252px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+export const Time = Styled.div`
+    text-align: right;
+    font-size: 10px;
+    color: silver;
+`
+
+export const NoNoti = Styled.div`
+    text-align: center;
 `

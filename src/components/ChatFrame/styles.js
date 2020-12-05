@@ -1,6 +1,7 @@
 import Styled from 'styled-components';
 import MyButton from '../MyButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton } from '@material-ui/core'
 
 export const Wrapper = Styled.div`
     width: 450px;
@@ -55,6 +56,16 @@ export const Name = Styled.div`
     height: 30px;
     padding-left:10px;
     line-height: 30px;
+    display: flex;
+    justify-content: space-between;
+    span {
+        white-space: unset;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -moz-box-orient: vertical;
+    }
 `
 
 export const BoxMessage = Styled.div`
@@ -120,6 +131,10 @@ export const BoxSend = Styled.form`
         margin-right: 0px;
         width: 16px;
     }
+    .MuiButtonBase-root {
+        padding: 5px;
+        min-width: unset;
+    }
 `
 
 export const Div = Styled.div`
@@ -134,6 +149,9 @@ export const Upload = Styled.div`
     right: 5px;
     top: 0px;
     cursor: pointer;
+    label {
+        cursor: pointer;
+    }
 `
 
 export const ButtonSend = Styled(MyButton)`
@@ -191,6 +209,13 @@ export const Receiver = Styled.div`
     margin-top: 10px;
 `
 
+export const WrapperBodyMessage = Styled.div`
+    background: #ddd;
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+`
+
 export const NameMessage = Styled.div`
     font-size: 10px;
     color: #1e3c72;
@@ -221,12 +246,16 @@ export const SelectedImage = Styled.div`
     img {
         width: 100%;
     }
-    svg {
+    .MuiButtonBase-root {
         position: absolute;
         right: 5px;
         top: 5px;
         color: #000;
         background: #fff;
+        padding: 3px 5px;
+    }
+    .MuiIconButton-colorPrimary:hover {
+        background-color: #fff;
     }
 `
 
@@ -236,5 +265,36 @@ export const Image = Styled.div`
     img {
         width: 150px;
     }
+`
+
+export const BtnIcon = Styled(FontAwesomeIcon)`
+    font-size: 14px;
+`
+
+export const IconButtonWrap = Styled(IconButton)`
+  color: #1e3c72 !important;
+`
+
+export const Question = Styled.div`
+    .MuiButtonBase-root {
+        width: 100%;
+        span {
+            text-align: left;
+            display: block;
+        }
+    }
+`
+
+export const QuestionBox = Styled.div`
+    width: 100%;
+    overflow-y: auto;
+    max-height: 140px;
+    font-size: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: #1e3c7282 #eee;
+    box-shadow: 0px 4px 5px silver;
+    position: absolute;
+    z-index: 102102;
+    background: #fff;
 `
 

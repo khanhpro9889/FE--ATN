@@ -19,3 +19,13 @@ export const getDistrictsByProvince = async (code) => {
         return err;
     }
 }
+
+export const getDistrictsByProvinceByCode = async (code) => {
+    const url = `http://localhost:3001/districts/province/code/${code}`;
+    try {
+        const res = await axiosClient.get(url);
+        return res.districts;
+    } catch(err) {
+        return err;
+    }
+}

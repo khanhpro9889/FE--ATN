@@ -35,11 +35,21 @@ export const Banner = Styled.div`
         display: flex;
         z-index: 5;
         position: relative;
+        .MuiIconButton-label {
+            @media only screen and (max-width: 480px) {
+                padding: 7px !important;
+            }
+        }
         .MuiInputBase-root {
             background: #fff;
             padding-left: 20px;
             padding-right: 20px;
             position: relative;
+            @media only screen and (max-width: 480px) {
+                padding: 2px 2px;
+                width: 100px;
+                font-size: 12px;
+            }
         }
         .MuiSelect-root {
             position:relative;
@@ -54,6 +64,9 @@ export const Banner = Styled.div`
             right: -25px;
             z-index: 5;
             top: 0px;
+            @media only screen and (max-width: 480px) {
+                display: none;
+            }
         }
         .MuiSelect-selectMenu {
             font-family: 'calibri', sans-serif;
@@ -65,8 +78,10 @@ export const Banner = Styled.div`
             display: flex;
             position: absolute;
             right: 0px;
-            
             height: 100%;
+            @media only screen and (max-width: 480px) {
+                right: -7px;
+            }
         }
         .MuiIconButton-label {
             background: #1e3c72;
@@ -77,6 +92,12 @@ export const Banner = Styled.div`
     input {
         border: none;
         font-size: 18px;
+        @media only screen and (max-width: 480px) {
+            padding-left: 5px;
+            padding-right: 7px;
+            width: 110px;
+            font-size: 12px;
+        }
     }
     
 `
@@ -152,6 +173,12 @@ export const Input1 = Styled(Select)`
     padding: 15px 20px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
+    @media only screen and (max-width: 480px) {
+        padding-left: 5px;
+        padding-right: 7px;
+        width: 110px;
+        font-size: 12px;
+    }
 `
 
 export const Input2 = Styled.input`
@@ -160,9 +187,14 @@ export const Input2 = Styled.input`
 
 export const Input3 = Styled.input`
     padding: 15px 20px;
-    padding-right: 100px;
+    padding-right: 60px !important;
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
+    @media only screen and (max-width: 480px) {
+        width: 150px !important;
+        padding-left: 0px !important;
+        padding-right: 40px !important;
+    }
 `
 
 export const ButtonSearch = Styled(IconButton)`
@@ -171,6 +203,10 @@ export const ButtonSearch = Styled(IconButton)`
 
 export const BtnIcon = Styled(FontAwesomeIcon)`
     color: #fff;
+    font-size: 18px;
+    @media only screen and (max-width: 480px) {
+        font-size: 12px;
+    }
 `
 
 export const Category = Styled.div`
@@ -333,6 +369,9 @@ export const Element = Styled.div`
    display: inline-block;
    margin-right: 20px;
    white-space: normal;
+   @media only screen and (max-width: 480px) {
+       width: 250px;
+   }
 `
 
 export const LoadingDiv = Styled.div`
@@ -340,4 +379,161 @@ export const LoadingDiv = Styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+`
+
+export const FlexBox = Styled.div`
+    display: flex;
+    height: 450px;
+    color: #fff;
+    @media only screen and (max-width: 768px) {
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        scrollbar-width: thin;
+        scrollbar-color: #1e3c7282 #eee;
+    }
+    @media only screen and (max-width: 480px) {
+        height: 350px;
+    }
+`
+
+export const Item1 = Styled.div`
+    flex: 1;
+    margin-right: 10px;
+    color: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: 300;
+    white-space: normal;
+    @media only screen and (max-width: 768px) {
+        display: inline-block;
+        width: 170px;
+        flex: unset;
+        flex-shrink: 0;
+    }
+`
+
+export const Item2 = Styled.div`
+    flex: 1;
+    height: 100%;
+    background: ${props => 'url(' + props.src + ')'};
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    padding: 0px 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding: 20px 20px;
+    border-radius: 10px;
+    position: relative;
+    border-radius: 10px;
+    cursor: pointer;
+    white-space: normal;
+    &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: #111;
+        opacity: 0.5;
+        border-radius: 10px;
+    }
+    @media only screen and (max-width: 768px) {
+        width: 220px;
+        flex: unset;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+`
+
+export const Item3 = Styled.div`
+    flex: 1;
+    height: 100%;
+    background: ${props => 'url(' + props.src + ')'};
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    padding: 0px 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding: 20px 20px;
+    border-radius: 10px;
+    position: relative;
+    border-radius: 10px;
+    cursor: pointer;
+    white-space: normal;
+    &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: #111;
+        opacity: 0.5;
+        border-radius: 10px;
+    }
+    @media only screen and (max-width: 768px) {
+        width: 220px;
+        flex: unset;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+`
+
+export const Item4 = Styled.div`
+    flex: 1;
+    height: 100%;
+    background: ${props => 'url(' + props.src + ')'};
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    padding: 0px 10px;
+    margin-left: 10px;
+    padding: 20px 20px;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    white-space: normal;
+    &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: #111;
+        opacity: 0.5;
+        border-radius: 10px;
+    }
+    @media only screen and (max-width: 768px) {
+        width: 220px;
+        flex: unset;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+`
+
+export const NameCity = Styled.div`
+    font-size: 30px;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+`
+
+export const Quantity = Styled.div`
+    font-size: 26px;
+    position: relative;
+    z-index: 1;
+`
+
+export const Sub = Styled.div`
+    font-size: 24px;
+`
+
+export const Div = Styled.div`
+    padding: 30px 0px;
+    background: #eee;
 `

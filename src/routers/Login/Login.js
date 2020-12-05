@@ -9,11 +9,11 @@ import {
     Right,
     FlexBox,
     LoginWithGoogle,
-    LoginWithFacebook,
+    //LoginWithFacebook,
     Icon
 } from './styles';
 import LoginForm from './LoginForm';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+//import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import GoogleLogin from 'react-google-login';
 import { loginSocial, login } from '../../api/authApi';
 import SnackBar from '../../components/SnackBar';
@@ -27,6 +27,7 @@ const Login = ({getUserProfile, loadingProfile}) => {
     const [openSnackBarLoginFail, setOpenSnackBarLoginFail] = useState(false);
     const [openSnackBarLoginFailOther, setOpenSnackBarLoginFailOther] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [openSnackBar, setOpenSnackBar] = useState(false);
 
     const handleLoginGoogle = async (response) => {
         const res = await loginSocial({
@@ -36,23 +37,26 @@ const Login = ({getUserProfile, loadingProfile}) => {
             profileImg: response.profileObj.imageUrl,
             socialType: 'google'
         })
-        localStorage.setItem('token', res.token);
+        if (res.message === 'Email exists') {
+            return setOpenSnackBar(true);
+        }
+        localStorage.setItem('token', `Bearer ${res.token}`);
         getUserProfile();
         history.push(HOME_PATH);
     }
 
-    const handleLoginFacebook = async (response) => {
-        const res = await loginSocial({
-            name: response.name,
-            email: null,
-            id: response.id,
-            profileImg: response.picture.data.url,
-            socialType: 'facebook'
-        })
-        localStorage.setItem('token', res.token);
-        getUserProfile();
-        history.push(HOME_PATH);
-    }
+    // const handleLoginFacebook = async (response) => {
+    //     const res = await loginSocial({
+    //         name: response.name,
+    //         email: null,
+    //         id: response.id,
+    //         profileImg: response.picture.data.url,
+    //         socialType: 'facebook'
+    //     })
+    //     localStorage.setItem('token', `Bearer ${res.token}`);
+    //     getUserProfile();
+    //     history.push(HOME_PATH);
+    // }
 
     const handleLogin = async (value) => {
         setLoading(true);
@@ -65,7 +69,7 @@ const Login = ({getUserProfile, loadingProfile}) => {
                 history.push(`/confirm?id=${res.uid}&type=reconfirm`);
             } else {
                 if (res.message === 'Auth successful') {
-                    localStorage.setItem('token', res.token);
+                    localStorage.setItem('token', `Bearer ${res.token}`);
                     getUserProfile();
                     history.push(HOME_PATH);
                 } else {
@@ -81,10 +85,12 @@ const Login = ({getUserProfile, loadingProfile}) => {
         }
         setOpenSnackBarLoginFail(false);
         setOpenSnackBarLoginFailOther(false);
+        setOpenSnackBar(false);
     }
 
     return (
         <>
+        <SnackBar open={openSnackBar} message="Email đã tồn tại" handleClose={handleCloseSnackBar} type="error"/>
         <SnackBar open={openSnackBarLoginFailOther} message="Có lỗi xảy ra" handleClose={handleCloseSnackBar} type="error"/>
         <SnackBar open={openSnackBarLoginFail} message="Sai tên đăng nhập hoặc mật khẩu" handleClose={handleCloseSnackBar} type="error"/>
         <Parents src={LoginBanner}>
@@ -96,7 +102,7 @@ const Login = ({getUserProfile, loadingProfile}) => {
                     </Left>
                     <Right>
                         Hoặc đăng nhập với   
-                        <FacebookLogin
+                        {/* <FacebookLogin
                             appId="2688883084718471"
                             autoLoad={false}
                             fields="name,email,picture"
@@ -106,7 +112,7 @@ const Login = ({getUserProfile, loadingProfile}) => {
                                     <Icon icon={['fab', 'facebook']} />Facebook
                                 </LoginWithFacebook>
                             )}
-                        />
+                        /> */}
                         <Divider />
                         <GoogleLogin
                             clientId="432278265369-6qkn2n488ckiadipp3lhahu7t76pb1er.apps.googleusercontent.com"

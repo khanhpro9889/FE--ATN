@@ -21,7 +21,6 @@ export const DeleteButton = Styled.span`
 export const Description = Styled.div`
     font-size: 16px;
     line-height: 1.5em;
-    margin-bottom: 7px;
 `
 
 export const Price = Styled.div`

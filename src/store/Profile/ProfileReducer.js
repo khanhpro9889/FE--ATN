@@ -8,6 +8,7 @@ import {
 
 const initialState = {
     loading: false,
+    loaded: false,
     userProfile: null,
 }
 
@@ -22,6 +23,7 @@ const profileReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
+                loaded: true,
                 userProfile: action.payload
             }
         case GET_USER_PROFILE_FAILURE:
@@ -29,6 +31,7 @@ const profileReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 error: action.payload,
+                loaded: true,
                 userProfile: null
             }
         case CLEAR_PROFILE:
