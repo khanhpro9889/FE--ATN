@@ -95,8 +95,7 @@ export const BtnIcon = Styled(FontAwesomeIcon)`
 export const Right = Styled.div`
     flex: 1;
     margin-left: 10px;
-    height: 500px;
-    margin-bottom: 20px;
+    height: 100vh;
     @media only screen and (max-width: 768px) {
         margin-left: 0px;
         flex: unset;

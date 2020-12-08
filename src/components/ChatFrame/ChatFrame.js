@@ -87,12 +87,8 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
 
     useEffect(() => {
         const getBoxMessage = async () => {
-            try {
-                const res = await getByGym(selectedConversation.gym._id);
-                setBoxMessage(res.boxMessage);
-            } catch (err) {
-                console.log(err);
-            }
+            const res = await getByGym(selectedConversation.gym._id);
+            setBoxMessage(res.boxMessage);
         }
         if (selectedConversation) {
             getBoxMessage();
@@ -199,6 +195,7 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
             console.log(err);
         }
     }
+    
     const handleDeleteMessage = async (id) => {
         setSelectedMessage(id);
         setOpenDialogConfirmDelete(true);
@@ -248,7 +245,7 @@ const ChatFrame = ({closeChatFrame, uid, setSrc, conversation}) => {
                                 component="span"
                                 onClick={() => setOpen(!open)}
                             >
-                                <BtnIcon icon={['fas', 'bars']} />
+                                <BtnIcon icon={['fas', 'plus']} />
                             </IconButtonWrap>}
                         </Name>
                         {open && 

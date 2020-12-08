@@ -60,7 +60,7 @@ const AdminApprove = () => {
         getAllUser(page || 1, search || '').then(res => {
             setUsers(res.users);
             setTotalPage(res.totalPage);
-            setCurrentPage(parseInt(page));
+            setCurrentPage(res.currentPage);
             setTotalUser(res.totalUser);
             history.push(location.pathname + `?page=${page || 1}&search=${search || ''}`);
             setLoading(false);
@@ -155,19 +155,14 @@ const AdminApprove = () => {
     }
 
     const handleChangePage = async (e, value) => {
-        try {
-            setLoading(true);
-            const res = await getAllUser(value);
-            setUsers(res.users);
-            setTotalPage(res.totalPage);
-            setCurrentPage(value);
-            setTotalUser(res.totalUser);
-            history.push(location.pathname + `?page=${value}&search=${searchContent}`);
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
-            console.log(error)
-        }
+        setLoading(true);
+        const res = await getAllUser(value, searchContent);
+        setUsers(res.users);
+        setTotalPage(res.totalPage);
+        setCurrentPage(value);
+        setTotalUser(res.totalUser);
+        history.push(location.pathname + `?page=${value}&search=${searchContent}`);
+        setLoading(false);
     }
 
     const handleCloseDialog = () => {
@@ -231,7 +226,7 @@ const AdminApprove = () => {
                                             <TableCell align="center"><strong>Email</strong></TableCell>
                                             <TableCell align="center"><strong>Tổng số bài đăng</strong></TableCell>
                                             <TableCell align="center"><strong>Tổng số đánh giá</strong></TableCell>
-                                            <TableCell align="center"><strong>Tổng số trả lời</strong></TableCell>
+                                            <TableCell align="center"><strong>Đã xác nhận</strong></TableCell>
                                             <TableCell align="center"><strong>Ngày tạo</strong></TableCell>
                                             <TableCell align="center"><strong>Action</strong></TableCell>
                                         </TableRow>
@@ -247,7 +242,7 @@ const AdminApprove = () => {
                                                     <TableCell align="center">{item.email}</TableCell>
                                                     <TableCell align="center">{item.gyms} bài đăng</TableCell>
                                                     <TableCell align="center">{item.reviews} đánh giá</TableCell>
-                                                    <TableCell align="center">{item.replies} trả lời</TableCell>
+                                                    <TableCell align="center">{item.isVerified ? 'Đã xác nhận Email' : <strong>Chưa xác nhận Email</strong>}</TableCell>
                                                     <TableCell align="center">{parseDate(item.createAt)}</TableCell>
                                                     <TableCell align="right">
                                                         <MyButton text={item.role === 'admin' ? `Admin` : 'User'} onClick={() => handleChangeRole(item._id, item.role === 'admin' ? `user` : 'admin')}/>

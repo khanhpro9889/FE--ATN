@@ -144,6 +144,7 @@ const SearchResult = ({profile}) => {
                 setZoom(5);
             }
             setError(false);
+            console.log(res.gyms);
             setGyms(res.gyms);
             setTotalPage(res.totalPage);
             setCurrentPage(res.currentPage);

@@ -21,18 +21,21 @@ export const Wrapper = Styled.div`
         top: 0px;
         left: 0px;
         background: #000;
-        opacity: 0.7;
+        opacity: 0.8;
     }
 `
 
 export const WrapperImg = Styled.div`
     max-width: 700px;
+    height: 
 `
 
 export const Img = Styled.img`
     width: 100%;
     position: relative;
     z-index: 31;
+    max-width: 100%;
+    height: 500px;
 `
 
 export const Icon = Styled(FontAwesomeIcon)`

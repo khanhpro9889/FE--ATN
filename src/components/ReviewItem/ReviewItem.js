@@ -22,6 +22,7 @@ import {
     HeaderLeft
 } from './styles';
 import DialogConfirmDelete from '../../components/DialogConfirmDelete/DialogConfirmDelete';
+import AvatarImg from '../../assets/images/avatar.jpg';
 
 const ReviewItem = ({isReply, reply, item, del, replies, author, openEditDialog, highlight}) => {
     const [open, setOpen] = useState(false);
@@ -38,7 +39,7 @@ const ReviewItem = ({isReply, reply, item, del, replies, author, openEditDialog,
         <Wrapper highlight={highlight} isReply={!isReply}>
             <FlexBox>
                 <Left>
-                    <Avatar src={item.author.profileImg}/>
+                    <Avatar src={item.author.profileImg || AvatarImg}/>
                 </Left>
                 <Right>
                     <Header>

@@ -54,27 +54,22 @@ const NearBy = () => {
 
     useEffect(() => {
         const getAllGymsApi = async () => {
-            try {
-                const res = await getAllGyms();
-                const newGyms = res.gym.map(item => {
-                    return {
-                        ...item._doc,
-                        reviews: item.reviews
-                    }
-                })
-                var findedGyms = [];
-                for (const g of newGyms) {
-                    const distance = distanceInKmBetweenEarthCoordinates(latLng[0], latLng[1], parseFloat(g.addresses.lat), parseFloat(g.addresses.lng));
-                    if (distance < 2) {
-                        findedGyms.push({gym: g, address: [g.addresses.lat, g.addresses.lng]});
-                    }
+            const res = await getAllGyms();
+            const newGyms = res.gym.map(item => {
+                return {
+                    ...item._doc,
+                    reviews: item.reviews
                 }
-                setLoading(false);
-                setGyms(findedGyms);
-            } catch (error) {
-                setLoading(false);
-                console.log(error)
+            })
+            var findedGyms = [];
+            for (const g of newGyms) {
+                const distance = distanceInKmBetweenEarthCoordinates(latLng[0], latLng[1], parseFloat(g.addresses.lat), parseFloat(g.addresses.lng));
+                if (distance < 2) {
+                    findedGyms.push({gym: g, address: [g.addresses.lat, g.addresses.lng]});
+                }
             }
+            setLoading(false);
+            setGyms(findedGyms);
         }
         if (latLng) {
             getAllGymsApi();

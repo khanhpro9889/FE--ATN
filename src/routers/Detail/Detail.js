@@ -67,6 +67,7 @@ import { HOME_PATH } from '../../constants/Path';
 import { useHistory } from 'react-router-dom';
 import FixedLoadingSpinner from '../../components/FixedLoadingSpinner';
 import GymItemV2 from '../../components/GymItemV2';
+import Avatar from '../../assets/images/avatar.jpg';
 
 const Detail = ({profile, addConversationStore, openChatFrame}) => {
   const { id } = useParams();
@@ -286,7 +287,7 @@ const Detail = ({profile, addConversationStore, openChatFrame}) => {
               <>
               <Host>
                 <NameHost>Được đăng bởi {gym.createBy.name}</NameHost>
-                <Link to={`/profile/${gym.createBy._id}`}><ProfileImage src={gym.createBy.profileImg}/></Link>
+                <Link to={`/profile/${gym.createBy._id}`}><ProfileImage src={gym.createBy.profileImg || Avatar}/></Link>
               </Host>
               <Name>Thông tin</Name>
               <SubTitle>
